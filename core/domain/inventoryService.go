@@ -35,6 +35,14 @@ func (s *StockService) RebuildEventStream() error {
 	return nil
 }
 
+func (s *StockService) GetAllProducts() []*Product {
+	products := []*Product{}
+	for _, product := range s.products {
+		products = append(products, product)
+	}
+	return products
+}
+
 func (s *StockService) StockChange(event StockChangeEvent) error {
 	if err := s.eventStore.Save(event); err != nil {
 		return err

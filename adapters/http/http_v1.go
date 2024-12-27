@@ -15,6 +15,7 @@ type StockHandler struct {
 func NewV1Handler(router *gin.RouterGroup, stockService *domain.StockService) {
 	handler := &StockHandler{stockService: stockService}
 	router.POST("/stock/change", handler.stockChange)
+	router.GET("/products", handler.GetAllProducts)
 }
 
 type StockChangeTO struct {
@@ -43,6 +44,10 @@ type BatchTO struct {
 type ProductTO struct {
 	Id   string `json:"id"`
 	Name string `json:"name"`
+}
+
+func (h *StockHandler) GetAllProducts(c *gin.Context) {
+	c.JSON(http.StatusOK, h.stockService.GetAllProducts())
 }
 
 func (h *StockHandler) stockChange(c *gin.Context) {
