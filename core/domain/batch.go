@@ -3,8 +3,8 @@ package domain
 import "time"
 
 type Batch struct {
-	Id           string
-	Product      Product
-	ProducedAt   time.Time
-	SellLatestAt time.Time
+	Id           string    `json:"id"`
+	Product      Product   `json:"product"`
+	ProducedAt   time.Time `json:"producedAt"`
+	SellLatestAt time.Time `json:"sellLatestAt"`
 }

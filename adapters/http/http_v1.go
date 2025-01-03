@@ -16,6 +16,9 @@ func NewV1Handler(router *gin.RouterGroup, stockService *domain.StockService) {
 	handler := &StockHandler{stockService: stockService}
 	router.POST("/stock/change", handler.stockChange)
 	router.GET("/products", handler.GetAllProducts)
+	router.GET("/batches", handler.GetBatches)
+	router.GET("/locations", handler.GetLocations)
+	router.GET("/stock", handler.GetStock)
 }
 
 type StockChangeTO struct {
@@ -48,6 +51,18 @@ type ProductTO struct {
 
 func (h *StockHandler) GetAllProducts(c *gin.Context) {
 	c.JSON(http.StatusOK, h.stockService.GetAllProducts())
+}
+
+func (h *StockHandler) GetStock(c *gin.Context) {
+	c.JSON(http.StatusOK, h.stockService.GetStock())
+}
+
+func (h *StockHandler) GetBatches(c *gin.Context) {
+	c.JSON(http.StatusOK, h.stockService.GetBatches())
+}
+
+func (h *StockHandler) GetLocations(c *gin.Context) {
+	c.JSON(http.StatusOK, h.stockService.GetLocations())
 }
 
 func (h *StockHandler) stockChange(c *gin.Context) {

@@ -1,8 +1,8 @@
 package domain
 
 type Quantity struct {
-	Amount float64
-	Unit   Unit
+	Amount float64 `json:"amount"`
+	Unit   Unit    `json:"unit"`
 }
 
 type Unit string
@@ -13,7 +13,7 @@ type StockItemKey struct {
 }
 
 type StockItem struct {
-	LocationId string
-	BatchId    string
-	Quantity   Quantity
+	LocationId string   `json:"locationId"`
+	BatchId    string   `json:"batchId"`
+	Quantity   Quantity `json:"quantity"`
 }

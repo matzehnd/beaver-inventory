@@ -35,12 +35,44 @@ func (s *StockService) RebuildEventStream() error {
 	return nil
 }
 
-func (s *StockService) GetAllProducts() []*Product {
-	products := []*Product{}
+func (s *StockService) GetAllProducts() []*ProductStock {
+	products := []*ProductStock{}
 	for _, product := range s.products {
-		products = append(products, product)
+		totalStock := s.getTotalStockForProduct(product)
+		products = append(products, &ProductStock{
+			Id:   product.Id,
+			Name: product.Name,
+			Quantity: Quantity{
+				Amount: totalStock,
+				Unit:   "pcs",
+			},
+		})
 	}
 	return products
+}
+
+func (s *StockService) GetStock() []*StockItem {
+	stockItems := []*StockItem{}
+	for _, stock := range s.stock {
+		stockItems = append(stockItems, stock)
+	}
+	return stockItems
+}
+
+func (s *StockService) GetBatches() []*Batch {
+	batches := []*Batch{}
+	for _, batch := range s.batches {
+		batches = append(batches, batch)
+	}
+	return batches
+}
+
+func (s *StockService) GetLocations() []*Location {
+	locations := []*Location{}
+	for _, location := range s.locations {
+		locations = append(locations, location)
+	}
+	return locations
 }
 
 func (s *StockService) StockChange(event StockChangeEvent) error {
@@ -78,6 +110,16 @@ func (s *StockService) apply(event interface{}) {
 	case StockChangeEvent:
 		s.ApplyStockChangeEvent(e)
 	}
+}
+func (s *StockService) getTotalStockForProduct(product *Product) float64 {
+	var sum float64
+	for _, item := range s.stock {
+		batch, exists := s.batches[item.BatchId]
+		if exists && batch.Product.Id == product.Id {
+			sum += item.Quantity.Amount
+		}
+	}
+	return sum
 }
 
 func getInventoryItemKey(Location Location, Batch Batch) StockItemKey {
